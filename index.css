@@ -1,0 +1,54 @@
+#container {
+    display: flex;
+    margin: 15px;
+    height: 725px
+}
+
+.checkbox {
+    margin-top: 0px;
+    height: 650px;
+    width: 250px;
+}
+
+.input {
+    margin-top: 0px;
+    height: 650px;
+    width: 400px;
+}
+
+.background {
+    background-color: rgb(87, 159, 251);
+    /* background-image: url('JxAbhAzbBh0.jpg'); */
+    color: white;
+    /* font-style: italic; */
+}
+
+.left-divs {
+    text-align: left;
+}
+
+.parent * {
+    margin-top: 5px;
+}
+
+.my-margin {
+    margin: 10px;
+}
+
+.margin * {
+    margin: 5px;
+}
+
+.generator-btn {
+    width: 500px;
+}
+
+.xz {
+    margin: 10px;
+    width: 650px;
+    text-align: center;
+}
+
+.btns-color {
+    background-color: rgb(221, 96, 251);
+}
