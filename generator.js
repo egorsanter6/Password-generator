@@ -105,7 +105,7 @@ function exceptSymbolsCombinationLogic() {
   
   // const uniqueSymbols = new Set(elements['exceptSymbolsCombination'].value.split(''))
 
-  if (elements['exceptSymbolsCombination'].value.length == 1 || passwordSymbols.length == 1) {
+  if (elements['exceptSymbolsCombination'].value.length == 1 || (passwordSymbols.length == 1 && elements['exceptSymbolsCombination'].value)) {
     elements['pwdGenBtn'].disabled = true
     checkFieldsValidity(exceptSymbolsCombinationLengthError, errorId, errorText)
   }
@@ -255,7 +255,7 @@ function exceptSymbolsLogic() {
         .filter(char => !elements['exceptSymbols'].value.includes(char))
         .join('')
 
-      if (filteredSymbols.length < 2) {
+      if (filteredSymbols.length < 2 && elements['exceptSymbolsCombination'].value) {
         elements['pwdGenBtn'].disabled = true
       } else {
         elements['pwdGenBtn'].disabled = false
