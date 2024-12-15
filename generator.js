@@ -111,7 +111,7 @@ function excludeSymbolsCombinationLogic() {
   }
 
   if ((exceptSymbolsCombinationLengthError && !elements['excludeSymbolsCombination'].value) || passwordSymbols.length > 1) {
-    if (elements['excludeSymbolsCombination'].value.length != 1) elements['pwdGenBtn'].disabled = false
+    if (elements['excludeSymbolsCombination'].value.length != 1 && !elements['requiredSymbols'].value) elements['pwdGenBtn'].disabled = false
     if (exceptSymbolsCombinationLengthError) {
       exceptSymbolsCombinationLengthError.remove()
     }
@@ -175,7 +175,7 @@ function requiredWordLogic() {
       if (requiredWordLengthError) requiredWordLengthError.remove()
     }
   } else {
-    if (!elements['excludeSymbolsCombination'].value) elements['pwdGenBtn'].disabled = false
+    if (!elements['excludeSymbolsCombination'].value && !elements['requiredSymbols'].value) elements['pwdGenBtn'].disabled = false
     if (requiredWordLengthError) requiredWordLengthError.remove()
   }
 }
