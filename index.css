@@ -36,8 +36,8 @@
     margin: 10px;
 }
 
-.margin-5px-for-childs * {
-    margin: 5px;
+.margin-1px-for-childs * {
+    margin: 1px;
 }
 
 .my-border {

@@ -393,7 +393,8 @@ async function passwordGenerator() {
       copyPassword.classList.add("btn", "btn-light", "btn-sm", "shadow-lg")
 
     const pwdSecurity = document.createElement('span')
-    pwdSecurity.textContent = 'Security: ' + passwordStatus(generatedPassword)
+    pwdSecurity.textContent = 'Security: ' + passwordStatus(generatedPassword) + '  '
+    pwdSecurity.style="white-space: pre;"
     passwordItem.appendChild(copyPassword)
     passwordItem.appendChild(passwordHider)
     passwordItem.appendChild(pwdSecurity)
