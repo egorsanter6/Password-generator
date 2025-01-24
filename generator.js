@@ -1,16 +1,16 @@
 const elementsArray = ['length', 'upperCase', 'lowerCase',
                       'digits', 'symbols', 'space',
                       'pwdGenBtn', 'passwords', 'errors',
-                      'overriddenSymbols', 'addSymbols', 'exceptSymbols',
+                      'overriddenSymbols', 'includeSymbols', 'excludeSymbols',
                       'requiredSymbols', 'numberOfPasswords', 'requiredWord',
                       'randomLength', 'randomLengthBlock', 'hidePasswords',
-                      'exceptSymbolsCombination', 'copyAllPwdsBtn', 'passwordStatus',
+                      'excludeSymbolsCombination', 'copyAllPwdsBtn', 'passwordStatus',
                       'randomWord'
                       ]
 const checkboxFieldsToListen = ['upperCase', 'lowerCase', 'digits',
                         'symbols', 'space'
-                       ]
-const inputFieldsToListen = ['overriddenSymbols', 'addSymbols', 'exceptSymbols',
+]
+const inputFieldsToListen = ['overriddenSymbols', 'includeSymbols', 'excludeSymbols',
   'requiredSymbols', 'requiredWord'
 ]
 
@@ -64,7 +64,7 @@ function updatePasswordSymbols() {
 
   console.log(pwdOrPwds)
   const errorId = 'definedSymbolsError'
-  const errorText = 'Please choose symbols for your future ' + pwdOrPwds + ' or override your own symbols'
+  const errorText = 'Please define some symbols for your future ' + pwdOrPwds + ' or override your own symbols'
   const definedSymbolsError = document.getElementById(errorId)
 
   if (passwordSymbols == '' || passwordSymbols == ' ') {
@@ -85,33 +85,33 @@ function pwdOrPwdsLogic() {
 }
 
 
-elements['exceptSymbolsCombination'].addEventListener('input', () => {
+elements['excludeSymbolsCombination'].addEventListener('input', () => {
   updatePasswordSymbols()
-  exceptSymbolsCombinationLogic()
+  excludeSymbolsCombinationLogic()
 })
 
-function exceptSymbolsCombinationLogic() {
+function excludeSymbolsCombinationLogic() {
   const errorId = 'exceptSymbolsCombinationLengthError'
   const errorText = 'Please define more than 1 symbol'
   const exceptSymbolsCombinationLengthError = document.getElementById(errorId)
 
-  if (elements['exceptSymbolsCombination'].value) {
+  if (elements['excludeSymbolsCombination'].value) {
     elements['requiredSymbols'].disabled = true
     elements['requiredWord'].disabled = true
   } else {
-    if (!elements['exceptSymbols'].value) elements['requiredSymbols'].disabled = false
+    if (!elements['excludeSymbols'].value) elements['requiredSymbols'].disabled = false
     elements['requiredWord'].disabled = false
   }
   
-  // const uniqueSymbols = new Set(elements['exceptSymbolsCombination'].value.split(''))
+  // const uniqueSymbols = new Set(elements['excludeSymbolsCombination'].value.split(''))
 
-  if (elements['exceptSymbolsCombination'].value.length == 1 || (passwordSymbols.length == 1 && elements['exceptSymbolsCombination'].value)) {
+  if (elements['excludeSymbolsCombination'].value.length == 1 || (passwordSymbols.length == 1 && elements['excludeSymbolsCombination'].value)) {
     elements['pwdGenBtn'].disabled = true
     checkFieldsValidity(exceptSymbolsCombinationLengthError, errorId, errorText)
   }
 
-  if ((exceptSymbolsCombinationLengthError && !elements['exceptSymbolsCombination'].value) || passwordSymbols.length > 1) {
-    if (elements['exceptSymbolsCombination'].value.length != 1) elements['pwdGenBtn'].disabled = false
+  if ((exceptSymbolsCombinationLengthError && !elements['excludeSymbolsCombination'].value) || passwordSymbols.length > 1) {
+    if (elements['excludeSymbolsCombination'].value.length != 1 && !elements['requiredSymbols'].value) elements['pwdGenBtn'].disabled = false
     if (exceptSymbolsCombinationLengthError) {
       exceptSymbolsCombinationLengthError.remove()
     }
@@ -121,13 +121,13 @@ function exceptSymbolsCombinationLogic() {
 
 function fieldsToDisable(arg) {
   let elementsToBlock = ['requiredWord',
-    'exceptSymbolsCombination', 'randomWord', 'space', 'addSymbols']
+    'excludeSymbolsCombination', 'randomWord', 'space', 'includeSymbols']
   
-  if (!elements['exceptSymbolsCombination'].value) elementsToBlock.push('pwdGenBtn')
-  if (!elements['exceptSymbols'].value) elementsToBlock.push('requiredSymbols')
+  if (!elements['excludeSymbolsCombination'].value) elementsToBlock.push('pwdGenBtn')
+  if (!elements['excludeSymbols'].value) elementsToBlock.push('requiredSymbols')
   
   elementsToBlock.forEach(element => elements[element].disabled = arg)
-  // if (elements['exceptSymbolsCombination'].value && passwordSymbols.length > 1) elements['pwdGenBtn'].disabled = false
+  // if (elements['excludeSymbolsCombination'].value && passwordSymbols.length > 1) elements['pwdGenBtn'].disabled = false
 }
 
 
@@ -142,16 +142,16 @@ function passwordSymbolsChecker() {
     passwordSymbols = elements['overriddenSymbols'].value
     requiredSymbolsLogic()
     requiredWordLogic()
-    exceptSymbolsLogic()
+    excludeSymbolsLogic()
     overriddenSymbolsChecker(true)
   } else {
     overriddenSymbolsChecker(false)
   }
   
   if (!elements['overriddenSymbols'].value) {
-    addSymbolsLogic()
+    includeSymbolsLogic()
     requiredSymbolsLogic()
-    exceptSymbolsLogic()
+    excludeSymbolsLogic()
     requiredWordLogic()
   }
 }
@@ -170,25 +170,25 @@ function requiredWordLogic() {
     if (currentLength / requiredWord.length < 5) {
       checkFieldsValidity(requiredWordLengthError, errorId, errorText)
       elements['pwdGenBtn'].disabled = true
-    } else if (!elements['exceptSymbolsCombination'].value) {
+    } else if (!elements['excludeSymbolsCombination'].value) {
       elements['pwdGenBtn'].disabled = false
       if (requiredWordLengthError) requiredWordLengthError.remove()
     }
   } else {
-    if (!elements['exceptSymbolsCombination'].value) elements['pwdGenBtn'].disabled = false
+    if (!elements['excludeSymbolsCombination'].value && !elements['requiredSymbols'].value) elements['pwdGenBtn'].disabled = false
     if (requiredWordLengthError) requiredWordLengthError.remove()
   }
 }
 
 
-function addSymbolsLogic() {
+function includeSymbolsLogic() {
   if (passwordSymbols && passwordSymbols != ' ') {
-    if (elements['addSymbols'].value) {
-      passwordSymbols += elements['addSymbols'].value
+    if (elements['includeSymbols'].value) {
+      passwordSymbols += elements['includeSymbols'].value
     }
-    elements['addSymbols'].disabled = false
+    elements['includeSymbols'].disabled = false
   } else {
-    elements['addSymbols'].disabled = true
+    elements['includeSymbols'].disabled = true
   }
 }
 
@@ -212,9 +212,9 @@ function requiredSymbolsLogic() {
   }
 
   if (requiredSymbolsError) requiredSymbolsError.remove()
-    if (!elements['exceptSymbolsCombination'].value) elements['pwdGenBtn'].disabled = false
+    if (!elements['excludeSymbolsCombination'].value) elements['pwdGenBtn'].disabled = false
 
-  elements['exceptSymbols'].disabled = !!elements['requiredSymbols'].value
+  elements['excludeSymbols'].disabled = !!elements['requiredSymbols'].value
 
   errorId = 'requiredSymbolsLengthError'
   errorText = "The length of required symbols exceeds 20% of password's length"
@@ -227,7 +227,7 @@ function requiredSymbolsLogic() {
     elements['pwdGenBtn'].disabled = true
     checkFieldsValidity(requiredSymbolsLengthError, errorId, errorText)
   } else {
-    if (!elements['exceptSymbolsCombination'].value) elements['pwdGenBtn'].disabled = false
+    if (!elements['excludeSymbolsCombination'].value) elements['pwdGenBtn'].disabled = false
     if (requiredSymbolsLengthError) requiredSymbolsLengthError.remove()
   }
 }
@@ -242,37 +242,37 @@ function getCurrentLength() {
 }
 
 
-function exceptSymbolsLogic() {
-  exceptSymbolsCombinationLogic()
+function excludeSymbolsLogic() {
+  excludeSymbolsCombinationLogic()
 
-  if (elements['exceptSymbols'].value) {
-    elements['exceptSymbols'].disabled = false
+  if (elements['excludeSymbols'].value) {
+    elements['excludeSymbols'].disabled = false
     elements['requiredSymbols'].disabled = true
 
-    if (passwordSymbols.length > 1 && elements['exceptSymbolsCombination'].value) {
+    if (passwordSymbols.length > 1 && elements['excludeSymbolsCombination'].value) {
       const filteredSymbols = passwordSymbols
         .split('')
-        .filter(char => !elements['exceptSymbols'].value.includes(char))
+        .filter(char => !elements['excludeSymbols'].value.includes(char))
         .join('')
 
-      if (filteredSymbols.length < 2 && elements['exceptSymbolsCombination'].value) {
+      if (filteredSymbols.length < 2 && elements['excludeSymbolsCombination'].value) {
         elements['pwdGenBtn'].disabled = true
       } else {
         elements['pwdGenBtn'].disabled = false
       }
-    } else if (passwordSymbols.length == 1 && elements['exceptSymbolsCombination'].value) {
+    } else if (passwordSymbols.length == 1 && elements['excludeSymbolsCombination'].value) {
       elements['pwdGenBtn'].disabled = true
     }
 
     passwordSymbols = passwordSymbols
       .split('')
-      .filter(char => !elements['exceptSymbols'].value.includes(char))
+      .filter(char => !elements['excludeSymbols'].value.includes(char))
       .join('')
   } else {
     if (!passwordSymbols || passwordSymbols === ' ') {
-      elements['exceptSymbols'].disabled = true
+      elements['excludeSymbols'].disabled = true
     }
-    if (!elements['exceptSymbolsCombination'].value) {
+    if (!elements['excludeSymbolsCombination'].value) {
       elements['requiredSymbols'].disabled = false
     }
   }
@@ -281,7 +281,7 @@ function exceptSymbolsLogic() {
 
 function overriddenSymbolsChecker(arg) {
   elementsToBlock = ['upperCase', 'lowerCase', 'digits',
-                     'symbols', 'space', 'addSymbols', 'randomWord'
+                     'symbols', 'space', 'includeSymbols', 'randomWord'
   ]
 
   elementsToBlock.forEach(element => elements[element].disabled = arg)
@@ -294,6 +294,7 @@ function checkFieldsValidity(error, id, errorText) {
     paragraph.id = id
     paragraph.textContent = errorText
     paragraph.style.color = 'red'
+    paragraph.classList.add("center-inside")
     elements['errors'].appendChild(paragraph)
   }
 }
@@ -369,8 +370,8 @@ async function passwordGenerator() {
         char =>
           (generatedPassword.match(new RegExp(char, 'g')) || []).length >= requiredSymbolsCounts[char]
       ) || 
-      (elements['exceptSymbolsCombination'].value &&
-       generatedPassword.includes(elements['exceptSymbolsCombination'].value))
+      (elements['excludeSymbolsCombination'].value &&
+       generatedPassword.includes(elements['excludeSymbolsCombination'].value))
     )
     
     generatedPasswords.push(generatedPassword)
@@ -392,7 +393,8 @@ async function passwordGenerator() {
       copyPassword.classList.add("btn", "btn-light", "btn-sm", "shadow-lg")
 
     const pwdSecurity = document.createElement('span')
-    pwdSecurity.textContent = 'Security: ' + passwordStatus(generatedPassword)
+    pwdSecurity.textContent = 'Security: ' + passwordStatus(generatedPassword) + '  '
+    pwdSecurity.style="white-space: pre;"
     passwordItem.appendChild(copyPassword)
     passwordItem.appendChild(passwordHider)
     passwordItem.appendChild(pwdSecurity)
